@@ -1,16 +1,18 @@
 import React from 'react';
 
-export default class MyInput extends React.Component {
-	constructor() {
-		super();
+class MyInput extends React.Component {
+	constructor(props) {
+		super(props);
 		this.state = {
-			defaultValue: 0
-		}
+			defaultValue: props.defaultValue
+		};
 	}
 
+
+
 	componentWillMount() {
-		console.log("componentWillMount");
-		this.state.defaultValue = this.props.defaultValue;
+		console.log('componentWillMount');
+		// this.state.defaultValue = this.props.defaultValue;
 	}
 
 	_onchange() {
@@ -19,7 +21,13 @@ export default class MyInput extends React.Component {
 	}
 
 	render() {
-		console.log("render");
-		return <input type="text" value={this.state.defaultValue} onChange={this._onchange.bind(this)} />;
+		console.log('render');
+		return (<input type="text" value={this.state.defaultValue} onChange={this._onchange.bind(this)} />);
 	}
 }
+
+MyInput.defaultProps = {
+	defaultValue: 10
+};
+
+export default MyInput;
