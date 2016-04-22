@@ -1,3 +1,6 @@
+ var webpack = require('webpack');
+ var path = require('path');
+
 module.exports = {
     // cache: true,
 
@@ -9,7 +12,7 @@ module.exports = {
     },
 
     resolve: {
-        extensions: ['', '.js', '.jsx']
+        extensions: ['', '.js', '.jsx', '.css', '.scss']
     },
 
     externals: {
@@ -25,7 +28,15 @@ module.exports = {
                 query: {
                     presets: ['es2015', 'react']
                 }
+            }, {
+                test: /\.scss$/,
+                loader: 'style!css!sass'
             }
         ]
-    }
+    },
+    
+    plugins: [
+        new webpack.optimize.OccurenceOrderPlugin(),
+        new webpack.NoErrorsPlugin()
+    ]
 };
