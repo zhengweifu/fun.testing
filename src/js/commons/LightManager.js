@@ -46,10 +46,10 @@ export default class LightComponment {
     }
 
     update(camera, target) {
-        var _cp = camera.position.clone();
+        let _cp = camera.position.clone();
 
-        var _cup = camera.up.clone();
-        var _cparent = camera.parent;
+        let _cup = camera.up.clone();
+        let _cparent = camera.parent;
 
         if(_cparent) {
             _cp.applyMatrix4(_cparent.matrixWorld);

@@ -4,24 +4,29 @@
 
 import THREE from 'three';
 
+// const px = require('../../../textures/cubemaps/common/05/px.jpg');
+// const nx = require('../../../textures/cubemaps/common/05/nx.jpg');
+// const py = require('../../../textures/cubemaps/common/05/py.jpg');
+// const ny = require('../../../textures/cubemaps/common/05/ny.jpg');
+// const pz = require('../../../textures/cubemaps/common/05/pz.jpg');
+// const nz = require('../../../textures/cubemaps/common/05/nz.jpg');
+
 export default class MaterialManager {
-    constructor(path, format) {
+    constructor(cubeURLS) {
 
         this.parameters = {
             'materialName': '925silver', // 925silver, 18kgold_red, 18kgold_yellow, 18kgold_white, gesso
             'technology': 'mirror' // mirror, frosted
         };
 
-        let urls = [
-            `${path}cubemaps/common/05/px${format}`, `${path}cubemaps/common/05/nx${format}`,
-            `${path}cubemaps/common/05/py${format}`, `${path}cubemaps/common/05/ny${format}`,
-            `${path}cubemaps/common/05/pz${format}`, `${path}cubemaps/common/05/nz${format}`
-        ];
-        let blurUrls = [
-            `${path}cubemaps/common/01/blur/px${format}`, `${path}cubemaps/common/01/blur/nx${format}`,
-            `${path}cubemaps/common/01/blur/py${format}`, `${path}cubemaps/common/01/blur/ny${format}`,
-            `${path}cubemaps/common/01/blur/pz${format}`, `${path}cubemaps/common/01/blur/nz${format}`
-        ];
+        let urls;
+
+        if(!cubeURLS) {
+            urls = [px, nx, py, ny, pz, nz];
+        } else {
+            urls = cubeURLS; 
+        } 
+        let blurUrls = urls.slice();
 
         this.reflectionCube = new THREE.CubeTextureLoader().load(urls, (_texture) => {
             _texture.format = THREE.RGBFormat;

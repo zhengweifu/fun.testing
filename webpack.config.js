@@ -12,7 +12,7 @@ module.exports = {
     },
 
     resolve: {
-        extensions: ['', '.js', '.jsx', '.css', '.scss']
+        extensions: ['', '.js', '.jsx', '.css', '.scss', 'jpg', 'png']
     },
 
     externals: {
@@ -31,6 +31,9 @@ module.exports = {
             }, {
                 test: /\.scss$/,
                 loader: 'style!css!sass'
+            }, {
+                test: /\.(jpg|png)$/, 
+                loader: 'url?limit=8192?name=dist/[hash:8].[name].[ext]'
             }
         ]
     },
