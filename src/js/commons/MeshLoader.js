@@ -80,59 +80,36 @@ export default class MeshLoader {
             uvLayers = 0;
 
         if(binary) {
-            function parseString(data, offset, length) {
-                let  charArray = new Uint8Array( data, offset, length);
-                let  text = '';
-                for (let i = 0; i < length; i ++ ) {
-                    text += String.fromCharCode( charArray[ offset + i ]);
-                }
-                return text;
-            }
-
-            function parseUChar8(data, offset) {
-                let  charArray = new Uint8Array(data, offset, 1);
-                return charArray[0];
-            }
-
-            function parseUInt32(data, offset) {
-                let  intArray = new Uint32Array(data.slice(offset, offset + 4), 0, 1);
-                return intArray[0];
-            }
-
-            function parseFloat32(data, offset) {
-                let  floatArray = new Float32Array(data.slice(offset, offset + 4), 0, 1);
-                return floatArray[0];
-            }
-
+ 
             var point = 0;
 
-            uvLayers = parseUChar8(data, point);
+            uvLayers = Util.parseUChar8(data, point);
 
             point += 1;
 
-            var uv_counts = [];
+            let uvCounts = [];
 
             for(let i = 0; i < uvLayers; i++) {
-                uv_counts.push(parseUInt32(data, point));
+                uvCounts.push(Util.parseUInt32(data, point));
                 point += 4;
             }
 
-            var normal_count = parseUInt32(data, point);
+            let normalCount = Util.parseUInt32(data, point);
             point += 4;
 
-            var vertex_count = parseUInt32(data, point);
+            let vertexCount = Util.parseUInt32(data, point);
             point += 4;
 
-            var face_infos = parseUInt32(data, point);
+            let faceInfos = Util.parseUInt32(data, point);
             point += 4;
 
             // uvs
-            var uv;
-            for(let i = 0; i < uv_counts.length; i++) {
+            let uv;
+            for(let i = 0; i < uvCounts.length; i++) {
                 uv = [];
 
-                for(let j=0; j < uv_counts[i] * 2; j++) {
-                    uv.push(parseFloat32(data, point));
+                for(let j = 0; j < uvCounts[i] * 2; j++) {
+                    uv.push(Util.parseFloat32(data, point));
                     point += 4;
                 }
                 if(uv.length > 0) {
@@ -141,20 +118,20 @@ export default class MeshLoader {
             }
 
             // normals
-            for(let i = 0; i < normal_count * 3; i++) {
-                normals.push(parseFloat32(data, point));
+            for(let i = 0; i < normalCount * 3; i++) {
+                normals.push(Util.parseFloat32(data, point));
                 point += 4;
             }
 
             // vertices
-            for(let i = 0; i < vertex_count * 3; i++) {
-                vertices.push(parseFloat32(data, point));
+            for(let i = 0; i < vertexCount * 3; i++) {
+                vertices.push(Util.parseFloat32(data, point));
                 point += 4;
             }
 
             // faces
-            for(let i = 0; i < face_infos; i++) {
-                faces.push(parseUInt32(data, point));
+            for(let i = 0; i < faceInfos; i++) {
+                faces.push(Util.parseUInt32(data, point));
                 point += 4;
             }
 

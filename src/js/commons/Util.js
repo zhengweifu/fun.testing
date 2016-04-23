@@ -11,7 +11,7 @@ var Util = {
     PROGRESS_USED_COUNT: 0,
     PROGRESS_USED : 0,
 
-    progressFrame :　null,
+    progressFrame : null,
     progressRectangle : null,
     messagePanel : null,
 
@@ -40,7 +40,7 @@ Util.IsMobile = {
         return navigator.userAgent.match(/IEMobile/i);
     },
     Any: function() {
-        return (ZUtils.IsMobile.Android() || ZUtils.IsMobile.BlackBerry() || ZUtils.IsMobile.iOS() || ZUtils.IsMobile.Opera() || ZUtils.IsMobile.Windows());
+        return (Util.IsMobile.Android() || Util.IsMobile.BlackBerry() || Util.IsMobile.iOS() || Util.IsMobile.Opera() || Util.IsMobile.Windows());
     }
 };
 
@@ -106,17 +106,19 @@ Util.createHttpRequest = function() {
 
     } else if (window.ActiveXObject) {// code for IE5 and IE6
 
-        request = new ActiveXObject('Microsoft.XMLHTTP');
+        request = new window.ActiveXObject('Microsoft.XMLHTTP');
 
         try {
-            request = new ActiveXObject('Msxml2.XMLHTTP');
+            request = new window.ctiveXObject('Msxml2.XMLHTTP');
         } catch (e) {
 
             try {
 
-                request = new ActiveXObject('Microsoft.XMLHTTP');
+                request = new window.ActiveXObject('Microsoft.XMLHTTP');
 
-            } catch (e) {}
+            } catch (e) {
+                console.log(e.message);
+            }
         }
     }
 
@@ -379,6 +381,28 @@ Util.getPosition = function(radian, up, eye, target, axis) {
     return newPoint;
 };
 
+Util.parseString = function(data, offset, length) {
+    let  charArray = new Uint8Array( data, offset, length);
+    let  text = '';
+    for (let i = 0; i < length; i ++ ) {
+        text += String.fromCharCode( charArray[ offset + i ]);
+    }
+    return text;
+};
+
+Util.parseUChar8 = function(data, offset) {
+    let  charArray = new Uint8Array(data, offset, 1);
+    return charArray[0];
+};
+
+Util.parseUInt32 = function(data, offset) {
+    let  intArray = new Uint32Array(data.slice(offset, offset + 4), 0, 1);
+    return intArray[0];
+};
+
+Util.parseFloat32 = function(data, offset) {
+    let  floatArray = new Float32Array(data.slice(offset, offset + 4), 0, 1);
+    return floatArray[0];
+};
+
 export default Util;
-
-
