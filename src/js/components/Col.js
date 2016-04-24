@@ -15,20 +15,21 @@ export default class Col extends React.Component {
 	} 
 
 	render() {
+		let Component = this.props.component;
 		let classSet = {};
 		let props = this.props;
 		['xs', 'sm', 'md', 'lg'].forEach(function(size) {
 			if(props[size]) {
-				classSet[`${size}-${props[size]}`] = true;
+				classSet[`col-${size}-${props[size]}`] = true;
 			}
 		});
 
 		return (
-			<div 
+			<Component 
 			{...props}
 			className={classNames(this.props.className, classSet)}>
 				{this.props.children}
-			</div>
+			</Component>
 		);
 	}
 
@@ -38,7 +39,10 @@ Col.propTypes = {
 	xs: React.PropTypes.number,
 	sm: React.PropTypes.number,
 	md: React.PropTypes.number,
-	lg: React.PropTypes.number
+	lg: React.PropTypes.number,
+	component: React.PropTypes.node
 };
 
-Col.defaultProps = {};
+Col.defaultProps = {
+	component: 'div'
+};

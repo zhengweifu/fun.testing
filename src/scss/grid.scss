@@ -1,4 +1,19 @@
-.grid {
-	
+.#{$ns}grid {
+	margin-left:  ceil(($gutter / -2));
+	margin-right: floor(($gutter / -2));
+  	@include clearfix;
 }
 
+@include make-grid(xs, $grid-gutter-width, $grid-columns);
+
+@media (min-width: $screen-sm) {
+	@include make-grid(sm, $grid-gutter-width, $grid-columns);
+}
+
+@media (min-width: $screen-md) {
+	@include make-grid(md, $grid-gutter-width, $grid-columns);
+}
+
+@media (min-width: $screen-lg) {
+	@include make-grid(lg, $grid-gutter-width, $grid-columns);
+}

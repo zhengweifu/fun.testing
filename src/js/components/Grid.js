@@ -3,6 +3,7 @@
  */
 
 import React from 'react';
+import classNames from 'classNames';
 
 export default class Grid extends React.Component {
 	constructor(props) {
@@ -13,11 +14,21 @@ export default class Grid extends React.Component {
 	} 
 
 	render() {
+		let Component = this.props.component;
 		return (
-			<div className={this.props.className}>
+			<Component className={classNames(this.props.className)}>
 				{this.props.children}
-			</div>
+			</Component>
 		);
 	}
 
 }
+
+
+Grid.propTypes = {
+	component: React.PropTypes.node
+};
+
+Grid.defaultProps = {
+	component: 'div'
+};

@@ -4,11 +4,13 @@
 module.exports = {
     // cache: true,
 
-    entry: './src/App.js',
+    entry: {
+        main: './src/App.js'
+    },
 
     output: {
         path: __dirname + '/dist',
-        filename: 'bundle.js'
+        filename: '[name].bundle.js'
     },
 
     resolve: {

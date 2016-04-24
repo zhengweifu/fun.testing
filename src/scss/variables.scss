@@ -1,3 +1,6 @@
+// namespace
+$ns: "fun-" !default;
+
 // Screen size
 
 $screen-xs: 480px !default;
@@ -8,3 +11,5 @@ $screen-lg: 1200px !default;
 
 // Grid
 $grid-columns: 12 !default;
+
+$grid-gutter-width:         30px !default;

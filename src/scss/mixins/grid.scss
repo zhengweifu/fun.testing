@@ -1,0 +1,86 @@
+// xs
+@mixin make-xs-column($columns, $gutter) {
+  position: relative;
+  float: left;
+  width: percentage(($columns / $grid-columns));
+  min-height: 1px;
+  padding-left:  ($gutter / 2);
+  padding-right: ($gutter / 2);
+}
+
+// sm
+@mixin make-sm-column($columns, $gutter) {
+  position: relative;
+  min-height: 1px;
+  padding-left:  ($gutter / 2);
+  padding-right: ($gutter / 2);
+
+  @media (min-width: $screen-sm) {
+    float: left;
+    width: percentage(($columns / $grid-columns));
+  }
+}
+
+// md
+@mixin make-md-column($columns, $gutter) {
+  position: relative;
+  min-height: 1px;
+  padding-left:  ($gutter / 2);
+  padding-right: ($gutter / 2);
+
+  @media (min-width: $screen-md) {
+    float: left;
+    width: percentage(($columns / $grid-columns));
+  }
+}
+
+// lg
+@mixin make-lg-column($columns, $gutter) {
+  position: relative;
+  min-height: 1px;
+  padding-left:  ($gutter / 2);
+  padding-right: ($gutter / 2);
+
+  @media (min-width: $screen-lg) {
+    float: left;
+    width: percentage(($columns / $grid-columns));
+  }
+}
+
+@mixin make-grid-column($gutter, $columns) {
+	$classes: "";
+	@for $index from 1 through $columns {
+		$classes = "#{$classes},
+			.#{$ns}col-xs-#{$index},
+			.#{$ns}col-sm-#{$index},
+			.#{$ns}col-md-#{$index},
+			.#{$ns}col-lg-#{$index}";
+	}
+
+	#{$classes} {
+		position: relative,
+		min-height: 1px,
+		padding-left:  ceil($gutter / 2);
+		padding-right: floor($gutter / 2);
+		float: left;
+	}
+}
+
+@mixin calc-grid-column($index, $class, $type) {
+	@if ($type == width and $index > 0) {
+		.#{ns}col-#{$class}-#{$index} {
+			width: percentage(($index / $grid-columns));
+		}
+	}
+}
+
+@mixin loop-grid-columns($columns, $class, $type) {
+  @for $i from 0 through $columns {
+    @include calc-grid-column($i, $class, $type);
+  }
+}
+
+@mixin make-grid($class, $gutter, $columns) {
+	@include make-grid-column($gutter, $columns);
+	@include loop-grid-columns($columns, $class, width);
+}
