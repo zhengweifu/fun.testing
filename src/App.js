@@ -1,4 +1,4 @@
-require('./scss/basic.scss');
+require('./scss/fun.scss');
 
 import React from 'react';
 
@@ -26,17 +26,17 @@ import Grid from './js/components/Grid';
 import Col from './js/components/Col';
 
 ReactDOM.render(
-    <Grid>
+    <Grid className="grid">
         <Col sm={3} md={4}>
-
+        	<button>aaaa</button>
         </Col>
 
-        <Col>
-
+        <Col sm={3} md={4}>
+			<button>aaaa</button>
         </Col>
 
-        <Col>
-
+        <Col sm={3} md={4}>
+        	<button>aaaa</button>
         </Col>
     </Grid>, 
     document.getElementById('app'));

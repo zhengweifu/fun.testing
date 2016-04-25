@@ -1,0 +1,13 @@
+.#{$ns}btn {
+	display: inline-block;
+	text-align: center;
+	vertical-align: middle;
+	cursor: pointer;
+	border: 1px solid transparent;
+	white-space: nowrap;
+
+	&:active,
+	&:focus {
+		text-decoration: none;
+	}
+}

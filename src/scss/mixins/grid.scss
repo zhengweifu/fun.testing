@@ -47,19 +47,14 @@
   }
 }
 
-@mixin make-grid-column($gutter, $columns) {
-	$classes: "";
-	@for $index from 1 through $columns {
-		$classes = "#{$classes},
-			.#{$ns}col-xs-#{$index},
-			.#{$ns}col-sm-#{$index},
-			.#{$ns}col-md-#{$index},
-			.#{$ns}col-lg-#{$index}";
+@mixin make-grid-column($gutter, $classes: "") {
+	@for $index from 1 through $grid-columns {
+		$classes : "#{$classes}, .#{$ns}col-xs-#{$index}, .#{$ns}col-sm-#{$index}, .#{$ns}col-md-#{$index}, .#{$ns}col-lg-#{$index}";
 	}
 
 	#{$classes} {
-		position: relative,
-		min-height: 1px,
+		position: relative;
+		min-height: 1px;
 		padding-left:  ceil($gutter / 2);
 		padding-right: floor($gutter / 2);
 		float: left;
@@ -68,19 +63,19 @@
 
 @mixin calc-grid-column($index, $class, $type) {
 	@if ($type == width and $index > 0) {
-		.#{ns}col-#{$class}-#{$index} {
+		.#{$ns}col-#{$class}-#{$index} {
 			width: percentage(($index / $grid-columns));
 		}
 	}
 }
 
-@mixin loop-grid-columns($columns, $class, $type) {
-  @for $i from 0 through $columns {
+@mixin loop-grid-columns($class, $type) {
+  @for $i from 0 through $grid-columns {
     @include calc-grid-column($i, $class, $type);
   }
 }
 
-@mixin make-grid($class, $gutter, $columns) {
-	@include make-grid-column($gutter, $columns);
-	@include loop-grid-columns($columns, $class, width);
+@mixin make-grid($class, $gutter) {
+	@include make-grid-column($gutter);
+	@include loop-grid-columns($class, width);
 }
