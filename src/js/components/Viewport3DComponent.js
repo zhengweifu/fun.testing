@@ -42,7 +42,7 @@ export default class Viewport3DComponent extends React.Component {
         this.center.add(this.props.inObject);
 
 
-        this.camera = new THREE.PerspectiveCamera(53,  this.width / this.height, 0.01, 1000);
+        this.camera = new THREE.PerspectiveCamera(this.props.fov,  this.width / this.height, 0.01, 1000);
         this.camera.applyMatrix(this.props.inCameraMatrix);
 
         this.renderer = new THREE.WebGLRenderer({canvas : this.refs.viewport3d, alpha: true, antialias: true, premultipliedAlpha: true, preserveDrawingBuffer: true});
@@ -114,6 +114,10 @@ export default class Viewport3DComponent extends React.Component {
         } else {
             setInterval(this._render, 1000 / 60);
         }
+    }
+
+    updateCameraMatrix(matrix) {
+        this.camera.applyMatrix(matrix);
     }
 
     componentWillMount() {

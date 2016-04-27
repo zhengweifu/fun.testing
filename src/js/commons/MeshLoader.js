@@ -9,13 +9,11 @@ import Util from './Util';
 import Loader from './Loader';
 
 export default class MeshLoader {
-    constructor(dom = null) {
+    constructor() {
         this.geometry = new THREE.Geometry();
-        this.dom = dom;
-        this.otherpara = null; // 其他参数
     }
     
-    parse(url, onLoad) {
+    parse(url, onLoad, onProgress, onError) {
         let loader = new Loader();
 
         loader.setResponseType('arraybuffer');
@@ -25,44 +23,17 @@ export default class MeshLoader {
         loader.load(url, (response) => {
             if(response) {
                 this.read(response, true, url);
-                onLoad(this.geometry, url, this.otherpara);
-            }
-
-            Util.PROGRESS_USED_COUNT += 1;
-
-            if(this.dom) {
-                console.log('GEOMETRY_COUNT: ', Util.GEOMETRY_COUNT, ' PROGRESS_USED_COUNT: ', Util.PROGRESS_USED_COUNT);
-                if(Util.GEOMETRY_COUNT === 0 || Util.PROGRESS_USED_COUNT === Util.GEOMETRY_COUNT) {
-                    Util.PROGRESS_USED = 0;
-                    Util.PROGRESS_USED_COUNT = 0;
-                    setTimeout(function () {
-                        //Util.progressHide();
-                    }, 0);
+                if(onLoad) {
+                    onLoad(this.geometry);
                 }
             }
         }, (event) => {
-            if(event.lengthComputable && this.dom) {
-                if(Util.GEOMETRY_COUNT > 0) {
-                    recodeProcess = (Util.PROGRESS_USED_COUNT + event.loaded / event.total) / Util.GEOMETRY_COUNT;
-                    if(recodeProcess <= Util.PROGRESS_USED) {
-                        recodeProcess = Util.PROGRESS_USED;
-                    } else {
-                        Util.PROGRESS_USED = recodeProcess;
-                    }
-                } else {
-                    recodeProcess = event.loaded / event.total;
-                }
-
-
-                if(recodeProcess > 1) {
-                    recodeProcess = 1;
-                }
-
-                if(recodeProcess < 0) {
-                    recodeProcess = 0;
-                }
-
-                Util.reportProgressSample(this.dom, recodeProcess);
+            if(onProgress) {
+                onProgress(event.lengthComputable);
+            }
+        }, (event) => {
+            if(onError) {
+                onError(event);
             }
         });
     }
