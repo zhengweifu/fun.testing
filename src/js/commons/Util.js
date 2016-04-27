@@ -2,23 +2,11 @@
  * Util tools by fun.zheng
  */
 
+require('babel-polyfill'); /* (Util.runGenerator) 解决 Uncaught ReferenceError: regeneratorRuntime is not defined */
+
 import THREE from 'three';
 
-var Util = {
-    PROCESSPERCENT : 1,
-
-    GEOMETRY_COUNT : 0,
-    PROGRESS_USED_COUNT: 0,
-    PROGRESS_USED : 0,
-
-    progressFrame : null,
-    progressRectangle : null,
-    messagePanel : null,
-
-    tipMessagePanel : null,
-
-    loadingPanel : null
-};
+var Util = {};
 
 /**
  * @type {{Android: Function, BlackBerry: Function, iOS: Function, Opera: Function, Windows: Function, Any: Function}}
@@ -224,25 +212,24 @@ Util.getAbsPath = function(url, sRelative) {
     return sUrl + sRelative;
 };
 
-
 /**
  * 将绝对路径转成相对路径
- * @param url
- * @param sAbs
- * @returns {*}
+ * @param  {[url 绝对路径]}
+ * @param  {[sAbs 相对的目标路径]}
+ * @return {[返回相对路径]}
  */
 Util.getRelativePath = function(url, sAbs) {
-    var urlN = url.replace('\\', '/');
-    var urlNL = urlN.split('/');
+    let urlN = url.replace('\\', '/');
+    let urlNL = urlN.split('/');
 
-    var sAbsN = sAbs.replace('\\', '/');
-    var sAbsNL = sAbsN.split('/');
+    let sAbsN = sAbs.replace('\\', '/');
+    let sAbsNL = sAbsN.split('/');
 
-    var lenUrl = urlNL.length;
-    var lenSAbs = sAbsNL.length;
+    let lenUrl = urlNL.length;
+    let lenSAbs = sAbsNL.length;
 
 
-    var ref = null;
+    let ref = null;
 
     for(let i = 0; i < lenUrl - 1 && i < lenSAbs; i++) {
         if(urlNL[i] !== sAbsNL[i]) {
@@ -259,7 +246,7 @@ Util.getRelativePath = function(url, sAbs) {
         return sAbs;
     }
 
-    var split = [];
+    let split = [];
 
     for(let i = ref; i < lenUrl - 1; i++) {
         split.push('..');
@@ -272,11 +259,12 @@ Util.getRelativePath = function(url, sAbs) {
     return split.join('/');
 };
 
+
 /**
  * 得到指定范围内的随机整数
- * @param min
- * @param max
- * @returns {*}
+ * @param  {[min 范围最小值]}
+ * @param  {[max 范围最大值]}
+ * @return {[返回随机值]}
  */
 Util.getRandomInt = function(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -284,10 +272,10 @@ Util.getRandomInt = function(min, max) {
 
 /**
  * 根据自定义轴旋转点
- * @param radian
- * @param pivotStart
- * @param pivotEnd
- * @returns {THREE.Vector3}
+ * @param  {[radian 旋转的弧度]}
+ * @param  {[pivotStart 开始轴坐标]}
+ * @param  {[pivotEnd 结束轴坐标]}
+ * @return {[旋转后的矩阵]}
  */
 Util.getRotationMatrix4FromCustomAsix = function (radian, pivotStart, pivotEnd) {
     let c = Math.cos(radian);
@@ -317,8 +305,6 @@ Util.getRotationMatrix4FromCustomAsix = function (radian, pivotStart, pivotEnd) 
         zv = z * v,
         zw = z * w;
 
-
-
     let m11 = uu + (vv + ww) * c,
         m12 = uv * (1 - c) - w * s,
         m13 = uw * (1 - c) + v * s,
@@ -343,12 +329,12 @@ Util.getRotationMatrix4FromCustomAsix = function (radian, pivotStart, pivotEnd) 
 
 /**
  * 得到点新的坐标
- * @param radian
- * @param up
- * @param eye
- * @param target
- * @param axis
- * @returns {THREE.Vector3}
+ * @param  {[radian 旋转的弧度]}
+ * @param  {[up 相机向上的方向]}
+ * @param  {[eye 相机的位置]}
+ * @param  {[target 相机目标位置]}
+ * @param  {[axis 轴向]}
+ * @return {[新的相机的点]}
  */
 Util.getPosition = function(radian, up, eye, target, axis) {
     let x = new THREE.Vector3(),
@@ -403,6 +389,85 @@ Util.parseUInt32 = function(data, offset) {
 Util.parseFloat32 = function(data, offset) {
     let  floatArray = new Float32Array(data.slice(offset, offset + 4), 0, 1);
     return floatArray[0];
+};
+
+
+/**
+ * A generator function runner
+ * @param  {[generatorFunction generator 函数]}
+ * @return {[type]}
+ */
+Util.runGenerator = function (generatorFunction) {
+    // 递归 next()
+    let next = function (arg) {
+    // let next = function (err, arg) {
+        // if error - throw and error
+        // if (err) {
+        //  return it.throw(err);
+        // }
+
+        // cache it.next(arg) as result
+        var result = it.next(arg);
+
+        // are we done?
+        if (result.done) {
+            return;
+        }
+
+        // result.value should be our callback() function from the XHR request
+        if (typeof result.value == 'function') {
+            // call next() as the callback()
+            result.value(next);
+        } else {
+            // if the response isn't a function
+            // pass it to next()
+            // next(null, result.value);
+            next(result.value);
+        }
+    };
+
+    // create the iterator
+    let it = generatorFunction();
+    return next();
+};
+
+/**
+ * 根据物体的boundingbox自动计算相机的位置
+ * @param  {[fov 相机夹角]}
+ * @param  {[aspect 相机宽高比]}
+ * @param  {[box3 物体boundingBox]}
+ * @return {[相机位置]}
+ */
+Util.autoCalculationCameraPositiion = function(fov, aspect, box3) {
+    let distance = box3.max.distanceTo(box3.min);
+
+    let center = box3.center();
+
+    let position = new THREE.Vector3();
+
+    if(distance) {
+        let dx = box3.max.x - box3.min.x,
+            dy = box3.max.y - box3.min.y,
+            dz = box3.max.z - box3.min.z;
+
+        let t = Math.tan(fov * Math.PI / 360);
+
+        if(dx / dy > aspect) {
+            dx /= aspect;
+        } else {
+            dx /= dx / dy; 
+        }
+
+        let d = dx * 0.5 / t;
+
+        position.set( 
+            center.x,
+            center.y,
+            center.z + (dz * 0.5 + d) * 1.0
+        );
+    }
+
+    return position;
 };
 
 export default Util;
