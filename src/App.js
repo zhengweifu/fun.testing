@@ -60,15 +60,27 @@ let g = new fabric.Group([rect1, c], {
     originY: 'center'
 });
 
-canvas.add(g);
+// canvas.add(g);
+
+fabric.Image.fromURL('/fun.testing/textures/004.jpg', (image) => {
+
+    image.set({ left: 0, top: 0, angle: 0 }).scale(0.2);
+    canvas.add(image);
+
+    // canvas.add(image).renderAll();
+    // canvas.setActiveObject(image);
+});
+
+
 
 let gMatrix = new THREE.Matrix4();
 
 
 document.getElementById('button-test').onclick = function() {
-
-    let radian = g.getAngle() * Math.PI / 180;
-    let c = Math.cos(radian), s = Math.sin(radian);
-    console.log(g.getLeft() - g.item(1).getTop() * s, g.getTop() + g.item(1).getTop() * c);
+    let currentObject = canvas.getActiveObject();
+    console.log(currentObject);
+    currentObject.filters.push(new fabric.Image.filters.Sepia());
+    currentObject.applyFilters(canvas.renderAll.bind(canvas));
+    
 };
 
