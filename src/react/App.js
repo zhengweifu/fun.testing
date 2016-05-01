@@ -60,9 +60,9 @@ let g = new fabric.Group([rect1, c], {
     originY: 'center'
 });
 
-// canvas.add(g);
+canvas.add(g);
 
-fabric.Image.fromURL('/fun.testing/textures/004.jpg', (image) => {
+fabric.Image.fromURL('/textures/004.jpg', (image) => {
 
     image.set({ left: 0, top: 0, angle: 0 }).scale(0.2);
     canvas.add(image);

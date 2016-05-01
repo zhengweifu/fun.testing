@@ -5,7 +5,8 @@ module.exports = {
     // cache: true,
 
     entry: {
-        main: './src/App.js'
+        react: './src/react/App.js',
+        redux: './src/redux/index.js'
     },
 
     output: {
