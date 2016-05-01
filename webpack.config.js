@@ -5,8 +5,8 @@ module.exports = {
     // cache: true,
 
     entry: {
-        react: './src/react/App.js',
-        redux: './src/redux/index.js'
+        // react: './src/react/App.js',
+        todolist: './src/redux/todolist/index.js'
     },
 
     output: {
