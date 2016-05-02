@@ -9,13 +9,15 @@ export const VisibilityFilters = {
 	SHOW_ALL: 'SHOW_ALL',
 	SHOW_COMPLETED: 'SHOW_COMPLETED',
 	SHOW_ACTIVE: 'SHOW_ACTIVE'
-}; 
+};
 
 export function addTodo(text) {
-	return {
-		type: ADD_TODO,
-		text: text
-	};
+	// setTimeout(() => {
+		return {
+			type: ADD_TODO,
+			text: text
+		};
+	// }, 1000);
 }
 
 export function completeTodo(index) {

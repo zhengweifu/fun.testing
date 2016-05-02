@@ -1,9 +1,9 @@
-import React from 'react';
+import React ,{ findDOMNode } from 'react';
 
 export default class Todo extends React.Component {
 	render() {
 		return (
-			<li 
+			<li
 				onClick={this.props.onClick}
 				style={{
 					textDecoration: this.props.completed ? 'line-through' : 'none',

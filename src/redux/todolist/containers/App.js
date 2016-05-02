@@ -1,4 +1,5 @@
 import React from 'react';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { addTodo, completeTodo, setVisibilityFilter, VisibilityFilters } from '../actions';
 import AddTodo from '../components/AddTodo';
@@ -7,24 +8,27 @@ import Footer from '../components/Footer';
 
 class App extends React.Component {
 	render() {
-		const { dispatch, visibleTodos, visibilityFilter } = this.props;
+		// const { dispatch, visibleTodos, visibilityFilter } = this.props;
 		return (
 			<div>
-				<AddTodo 
+				<AddTodo
 					onAddClick={(text) => {
-						dispatch(addTodo(text));
+						// dispatch(addTodo(text));
+						this.props.addTodo(text);
 					}}
 				/>
-				<TodoList 
+				<TodoList
 					todos={this.props.visibleTodos}
 					onTodoClick={(index) => {
-						dispatch(completeTodo(index));
-					}} 
+						// dispatch(completeTodo(index));
+						this.props.completeTodo(index);
+					}}
 				/>
-				<Footer 
+				<Footer
 					filter={this.props.visibilityFilter}
 					onFilterChange={(filter) => {
-						dispatch(setVisibilityFilter(filter));
+						// dispatch(setVisibilityFilter(filter));
+						this.props.setVisibilityFilter(filter);
 					}}
 				/>
 			</div>
@@ -56,11 +60,15 @@ function selectTodos(todos, filter) {
 }
 
 function mapStateToProps(state) {
-	console.log(state);
+	// console.log(state);
 	return {
 		visibleTodos: selectTodos(state.todos, state.visibilityFilter),
 		visibilityFilter: state.visibilityFilter
 	};
 }
 
-export default connect(mapStateToProps)(App);
+function mapDispatchToProps(dispatch) {
+	return bindActionCreators({addTodo, completeTodo, setVisibilityFilter}, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
